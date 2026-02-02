@@ -1,0 +1,105 @@
+/* Custom Calendar Event Styles - Override react-big-calendar defaults */
+
+/* Force border styles for all calendar events */
+.rbc-event {
+  background-color: white !important;
+  border-radius: 6px !important;
+  padding: 2px 6px !important;
+  font-size: 12px !important;
+  color: #000000 !important;
+  box-shadow: none !important;
+}
+
+/* Remove default background color */
+.rbc-event.rbc-selected {
+  background-color: white !important;
+}
+
+/* Ensure border is visible */
+.rbc-event-content {
+  color: #000000 !important;
+}
+
+/* Past events - Gray border */
+.rbc-event.event-past {
+  border: 3px solid lch(49.05% 96.64 39.43) !important;
+  background-color: white !important;
+  opacity: 0.7 !important;
+}
+
+/* Declined events - Red border */
+.rbc-event.event-declined {
+  border: 2px solid #dc2626 !important;
+  background-color: white !important;
+}
+
+/* Accepted events - Green border */
+.rbc-event.event-accepted {
+  border: 2px solid #10b981 !important;
+  background-color: white !important;
+}
+
+/* Pending events - Orange border */
+.rbc-event.event-pending {
+  border: 2px solid #f59e0b !important;
+  background-color: white !important;
+}
+
+/* Owner events - Blue border */
+.rbc-event.event-owner {
+  border: 3px solid #2563eb !important;
+  background-color: white !important;
+  font-weight: 600 !important;
+}
+
+/* Attendee events - Green border */
+.rbc-event.event-attendee {
+  border: 2px solid #059669 !important;
+  background-color: white !important;
+}
+
+/* Default events - Gray border */
+.rbc-event.event-none {
+  border: 2px solid #6b7280 !important;
+  background-color: white !important;
+}
+
+/* Ensure selected events also maintain border */
+.rbc-event.rbc-selected {
+  background-color: #f9fafb !important;
+}
+
+/* Month view event styling */
+.rbc-month-view .rbc-event {
+  border-radius: 4px !important;
+}
+
+/* Week and Day view event styling */
+.rbc-day-slot .rbc-event,
+.rbc-time-slot .rbc-event {
+  border-radius: 6px !important;
+}
+
+/* Agenda view event styling */
+.rbc-agenda-view .rbc-event {
+  border-radius: 6px !important;
+  padding: 4px 8px !important;
+}
+
+/* Hover effect */
+.rbc-event:hover {
+  background-color: #f9fafb !important;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* All-day events */
+.rbc-event.rbc-event-allday {
+  border-radius: 6px !important;
+}
+
+/* Event label text */
+.rbc-event-label {
+  color: #000000 !important;
+  font-size: 11px !important;
+}
