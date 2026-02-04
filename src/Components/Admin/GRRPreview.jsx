@@ -370,7 +370,7 @@ const generatePDF = async (quality = "medium", forEmail = false) => {
     console.log("Sending email with PDF attachment...");
     
     try {
-      const response = await fetch('https://qsutrarmsclm.hub.swajyot.co.in:8458/api/mail/send', {
+      const response = await fetch('http://localhost:8080/api/mail/send', {
         method: 'POST',
         body: formData,
       });
@@ -428,7 +428,7 @@ const generatePDF = async (quality = "medium", forEmail = false) => {
       formData.append('subject', `${shareSubject} (Report Available in Application)`);
       formData.append('body', `${shareMessage}\n\nNote: The full GRR Study Report PDF is available for download in the application.`);
       
-      const response = await fetch('https://qsutrarmsclm.hub.swajyot.co.in:8458/api/mail/send', {
+      const response = await fetch('http://localhost:8080/api/mail/send', {
         method: 'POST',
         body: formData,
       });

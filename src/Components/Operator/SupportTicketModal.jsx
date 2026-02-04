@@ -384,7 +384,7 @@ const SupportTicketModal = ({ isOpen, onClose }) => {
       emailData.append("html", fullHtml);
       uploadedFiles.forEach(file => emailData.append("attachments", file));
 
-      const response = await fetch("https://qsutrarmsclm.hub.swajyot.co.in:8458/api/mail/send", {
+      const response = await fetch("http://localhost:8080/api/mail/send", {
         method: "POST",
         body: emailData,
       });

@@ -767,7 +767,7 @@ const handleSendTicket = async () => {
   uploadedFiles.forEach(file => emailData.append("attachments", file));
 
   try {
-    const response = await fetch("https://qsutrarmsclm.hub.swajyot.co.in:8458/api/mail/send", {
+    const response = await fetch("http://localhost:8080/api/mail/send", {
       method: "POST",
       body: emailData,
     });
@@ -939,7 +939,7 @@ const sendGageRequestEmail = async () => {
       cc: ["supervisor@example.com", "qa@example.com"] // multiple CCs
     };
 
-    const response = await fetch("https://qsutrarmsclm.hub.swajyot.co.in:8458/api/users", {
+    const response = await fetch("http://localhost:8080/api/users", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

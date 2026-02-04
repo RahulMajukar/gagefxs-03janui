@@ -528,3 +528,27 @@ tbody > tr:hover {
   }
 }
 
+/* Add these to your CalendarStyles.css or CalendarCustomStyles.css file */
+
+/* Inward events - Green styling */
+.rbc-event.event-inward {
+  background-color: rgba(22, 163, 74, 0.15) !important;
+  border-left: 4px solid #16a34a !important;
+  color: #14532d !important;
+}
+
+.rbc-event.event-inward:hover {
+  background-color: rgba(22, 163, 74, 0.25) !important;
+}
+
+/* Scheduled events - Orange styling */
+.rbc-event.event-scheduled {
+  background-color: rgba(245, 158, 11, 0.15) !important;
+  border-left: 4px solid #f59e0b !important;
+  color: #78350f !important;
+  /* border: 3px solid #f59e0b !important; */
+}
+
+.rbc-event.event-scheduled:hover {
+  background-color: rgba(245, 158, 11, 0.25) !important;
+}

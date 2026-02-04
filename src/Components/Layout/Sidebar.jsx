@@ -296,8 +296,12 @@ export default function Sidebar({
   if (loading || !user) return null;
 
   const isAdmin = hasRole("ADMIN");
-  const isItAdmin = hasRole("IT_ADMIN") || hasRole("IT ADMIN");
+  const isItAdmin = hasRole("IT_ADMIN");
+  const isOperator = hasRole("OPERATOR");
   const isCalibrationManager = user.role === "CALIBRATION_MANAGER";
+
+  // ✅ KEY CHANGE: Allow OPERATOR to see the same dashboard as IT_ADMIN
+  const showAdminDashboard = isAdmin || isItAdmin || isOperator;
 
   const functionsToShow = ["INVENTORY_MANAGER"].includes(user.role)
     ? ["f1", "f2", "f3"]
@@ -443,6 +447,7 @@ export default function Sidebar({
                 <p className="text-white/80 text-sm truncate">
                   {userInfo.role === "IT_ADMIN" ? "QC Manager" :
                    userInfo.role === "CALIBRATION_MANAGER" ? "Plant Head" :
+                   userInfo.role === "OPERATOR" ? "Operator" :
                    userInfo.role}
                 </p>
               </div>
@@ -477,11 +482,7 @@ export default function Sidebar({
           <nav className="h-full overflow-y-auto overflow-x-hidden p-3 space-y-1 scrollbar-thin scrollbar-thumb-[#004a80] scrollbar-track-transparent">
             {/* Dashboard */}
             <NavLink
-              to={
-                user.role === "IT_ADMIN"
-                  ? "/dashboard"
-                  : `/dashboard/${user.role?.toLowerCase() || 'default'}`
-              }
+              to="/dashboard" // ✅ ALL users now go to same dashboard
               onClick={closeSidebarMobile}
               className={({ isActive }) =>
                 `flex items-center ${isCollapsed ? "justify-center px-2" : "gap-4 px-4"} py-3 rounded-lg text-sm font-medium transition-all ${isActive
@@ -512,8 +513,6 @@ export default function Sidebar({
               <Calendar size={isCollapsed ? 24 : 22} />
               {!isCollapsed && <span className="font-medium">Calendar</span>}
             </NavLink>
-
-
 
             {/* Chat */}
             <button
@@ -572,25 +571,6 @@ export default function Sidebar({
               {!isCollapsed && <span className="font-medium">Scan Gage</span>}
             </button>
 
-            {/* Reallocation Requests - HOD only */}
-            {/* <button
-              onClick={handleNotificationsClick}
-              disabled={!showReallocFeature}
-              className={`flex items-center ${isCollapsed ? "justify-center px-2" : "justify-between px-4"} w-full py-3 rounded-lg text-sm transition-all ${showReallocFeature ? "text-white hover:bg-[#004a80] cursor-pointer" : "text-white/60 cursor-not-allowed"}`}
-              data-tooltip-id={isCollapsed ? "realloc-tooltip" : ""}
-              data-tooltip-content={isCollapsed ? "Reallocation Requests" : ""}
-            >
-              <div className={`flex items-center ${isCollapsed ? "gap-0" : "gap-4"}`}>
-                <Bell size={isCollapsed ? 24 : 22} />
-                {!isCollapsed && <span className="font-medium">Reallocation Requests</span>}
-              </div>
-              {!isCollapsed && showReallocFeature && hodNotificationCount > 0 && (
-                <span className="bg-red-600 text-white text-xs rounded-full min-w-[22px] h-5 flex items-center justify-center text-[10px] font-bold">
-                  {hodNotificationCount}
-                </span>
-              )}
-            </button> */}
-
             {/* Operator Notifications */}
             {showOperatorNotifications && (
               <button
@@ -614,20 +594,9 @@ export default function Sidebar({
               </button>
             )}
 
-
             {/* Collapsed admin icons */}
-            {(isAdmin || isItAdmin || isCalibrationManager) && isCollapsed && (
+            {showAdminDashboard && isCollapsed && (
               <div className="space-y-1">
-                <NavLink
-                  to="/dashboard"
-                  onClick={closeSidebarMobile}
-                  className={({ isActive }) =>
-                    `flex items-center justify-center py-3 px-2 rounded-lg text-sm transition-all ${isActive ? "bg-[#004a80] text-white shadow-md" : "text-white hover:text-white hover:bg-[#004a80]"}`
-                  }
-                  data-tooltip-id="admin-dashboard-tooltip"
-                >
-                </NavLink>
-                
                 {isItAdmin && (
                   <NavLink
                     to="/admin/calibration"
@@ -645,25 +614,42 @@ export default function Sidebar({
             )}
 
             {/* Admin/Inventory Management - only when expanded */}
-            {(isAdmin || isItAdmin || isCalibrationManager) && !isCollapsed && (
+            {showAdminDashboard && !isCollapsed && (
               <>
-                {!isItAdmin && (
-                  <button
-                    onClick={() => toggleSection("admin")}
-                    className="flex items-center justify-between w-full py-3 px-4 text-sm font-medium text-white hover:text-white transition-colors hover:bg-[#004a80] rounded-lg"
-                  >
-                    <span className="flex items-center gap-4">
-                      <Shield size={22} />
-                      <span className="font-medium">Inventory Management</span>
-                    </span>
-                    {openSections.admin ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
-                  </button>
-                )}
+                {/* Admin section header */}
+                <div className="mt-3 pt-3 border-t border-white/20">
+                  <h3 className="px-4 text-xs uppercase tracking-wider text-white/60 mb-2 font-medium">
+                    {isOperator ? "Operator Panel" : "Admin Panel"}
+                  </h3>
+                </div>
+                
+                {/* Dashboard for all admin users */}
+                <NavLink
+                  to="/dashboard"
+                  onClick={closeSidebarMobile}
+                  className={({ isActive }) =>
+                    `flex items-center gap-4 py-3 px-4 rounded text-sm transition-all ${isActive ? "bg-[#004a80] text-white" : "text-white hover:text-white hover:bg-[#004a80]"}`
+                  }
+                >
+                  <Home size={22} /> <span className="font-medium">Admin Dashboard</span>
+                </NavLink>
 
-                {openSections.admin && (
-                  <div className="mt-1 space-y-1 pl-12">
-                    {isItAdmin || isCalibrationManager && (
-                      <>
+                {/* Inventory Management for IT_ADMIN and ADMIN only (not for OPERATOR) */}
+                {(isAdmin || isItAdmin || isOperator) && (
+                  <>
+                    <button
+                      onClick={() => toggleSection("admin")}
+                      className="flex items-center justify-between w-full py-3 px-4 text-sm font-medium text-white hover:text-white transition-colors hover:bg-[#004a80] rounded-lg"
+                    >
+                      <span className="flex items-center gap-4">
+                        <Shield size={22} />
+                        <span className="font-medium">Inventory Management</span>
+                      </span>
+                      {openSections.admin ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
+                    </button>
+
+                    {openSections.admin && (
+                      <div className="mt-1 space-y-1 pl-12">
                         <NavLink to="/it-admin/users" onClick={closeSidebarMobile} className={({ isActive }) => `flex items-center gap-3 py-2 px-4 rounded text-sm transition-all ${isActive ? "bg-[#004a80] text-white" : "text-white hover:text-white hover:bg-[#003a70]"}`}>
                           <Users size={18} /> <span>Users</span>
                         </NavLink>
@@ -679,23 +665,22 @@ export default function Sidebar({
                         <NavLink to="/it-admin/roles" onClick={closeSidebarMobile} className={({ isActive }) => `flex items-center gap-3 py-2 px-4 rounded text-sm transition-all ${isActive ? "bg-[#004a80] text-white" : "text-white hover:text-white hover:bg-[#003a70]"}`}>
                           <Shield size={18} /> <span>Roles</span>
                         </NavLink>
-                      </>
+                      </div>
                     )}
-                  </div>
+                  </>
                 )}
 
-                {isItAdmin && (
-                  <div className="space-y-1">
-                    <NavLink
-                      to="/admin/calibration"
-                      onClick={closeSidebarMobile}
-                      className={({ isActive }) =>
-                        `flex items-center gap-4 py-3 px-4 rounded text-sm transition-all ${isActive ? "bg-[#004a80] text-white" : "text-white hover:text-white hover:bg-[#004a80]"}`
-                      }
-                    >
-                      <Ruler size={22} /> <span className="font-medium">Calibration Manager</span>
-                    </NavLink>
-                  </div>
+                {/* Calibration Management for IT_ADMIN only */}
+                { (isItAdmin || isOperator) && (
+                  <NavLink
+                    to="/admin/calibration"
+                    onClick={closeSidebarMobile}
+                    className={({ isActive }) =>
+                      `flex items-center gap-4 py-3 px-4 rounded text-sm transition-all ${isActive ? "bg-[#004a80] text-white" : "text-white hover:text-white hover:bg-[#004a80]"}`
+                    }
+                  >
+                    <Ruler size={22} /> <span className="font-medium">Calibration Manager</span>
+                  </NavLink>
                 )}
               </>
             )}

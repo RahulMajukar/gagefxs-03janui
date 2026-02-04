@@ -53,7 +53,7 @@ const GageFormImport = ({ onImportComplete }) => {
         description: `Calibration due for ${gageData.modelNumber || 'Gage'} (SN: ${gageData.serialNumber})`,
         start: startDate.toISOString(),
         end: endDate.toISOString(),
-        category: "work",
+        category: "scheduled",
         priority: CRITICALITY_PRIORITY_MAP[gageData.criticality] || "medium",
         location: gageData.location || "",
         gageName: gageData.gageName,

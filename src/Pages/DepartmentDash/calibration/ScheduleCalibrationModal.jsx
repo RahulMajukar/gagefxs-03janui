@@ -337,7 +337,7 @@ Quality Assurance Department`;
         backViewPhotoContentType: 'image/jpeg'
       };
       const userEmail = localStorage.getItem("email");
-      const res = await fetch(`https://qsutrarmsclm.hub.swajyot.co.in:8458/api/calibration-manager/gages/${selectedGage?.id || 1}/schedule`, {
+      const res = await fetch(`http://localhost:8080/api/calibration-manager/gages/${selectedGage?.id || 1}/schedule`, {
         method: 'POST',
         headers: {
           "Content-Type": "application/json",
@@ -356,7 +356,7 @@ Quality Assurance Department`;
       const startDateTime = new Date(`${formData.scheduledDate}T${formData.scheduledTime}`);
       const endDateTime = new Date(startDateTime.getTime() + (formData.estimatedDuration * 60 * 60 * 1000));
 
-      await fetch('https://qsutrarmsclm.hub.swajyot.co.in:8458/api/calendar/events', {
+      await fetch('http://localhost:8080/api/calendar/events', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

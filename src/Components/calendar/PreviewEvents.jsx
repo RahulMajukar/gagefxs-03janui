@@ -103,7 +103,7 @@ const PreviewEvents = () => {
     try {
       const username = localStorage.getItem('username');
       if (!username) throw new Error('User email is required');
-      const response = await fetch('https://qsutrarmsclm.hub.swajyot.co.in:8458/api/calendar/events', {
+      const response = await fetch('http://localhost:8080/api/calendar/events', {
         headers: { 'User-Email': username }
       });
       if (!response.ok) throw new Error('Failed to fetch data');
@@ -342,7 +342,7 @@ const PreviewEvents = () => {
     }
     setSmsLoading(true);
     try {
-      const response = await fetch('https://qsutrarmsclm.hub.swajyot.co.in:8458/api/gages/send', {
+      const response = await fetch('http://localhost:8080/api/gages/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

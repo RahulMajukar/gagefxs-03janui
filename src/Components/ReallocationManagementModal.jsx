@@ -501,7 +501,7 @@ const ReallocationManagementModal = ({ isOpen, onClose, onRefresh, preselectReal
           emailFormData.append('subject', `✅ Approved: Gage Reallocation - ${selectedReallocate.gageSerialNumber}`);
           emailFormData.append('html', emailBody);
           emailFormData.append('from', 'plant.hod@gagefx.com');
-          const mailResponse = await fetch('https://qsutrarmsclm.hub.swajyot.co.in:8458/api/mail/send', {
+          const mailResponse = await fetch('http://localhost:8080/api/mail/send', {
             method: 'POST',
             body: emailFormData,
           });
@@ -565,7 +565,7 @@ const ReallocationManagementModal = ({ isOpen, onClose, onRefresh, preselectReal
           emailFormData.append('subject', `❌ Rejected: Gage Reallocation - ${selectedReallocate.gageSerialNumber}`);
           emailFormData.append('html', emailBody);
           emailFormData.append('from', 'plant.hod@gagefx.com');
-          const mailResponse = await fetch('https://qsutrarmsclm.hub.swajyot.co.in:8458/api/mail/send', {
+          const mailResponse = await fetch('http://localhost:8080/api/mail/send', {
             method: 'POST',
             body: emailFormData,
           });

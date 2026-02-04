@@ -5,7 +5,7 @@ const http = require('http');
 const { WebSocketServer } = require('ws');
 
 const corsOptions = {
-  origin: ['http://localhost:5173', 'http://127.0.0.1:5173', 'https://qsutrarmsclm.hub.swajyot.co.in:8458'],
+  origin: ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:8080'],
   credentials: true,
 };
 

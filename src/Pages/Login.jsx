@@ -138,9 +138,10 @@ export default function Login() {
                 <option value="IT_ADMIN">QC Manager</option>
                 {/* <option value="ADMIN">Admin</option>
                 <option value="CRIB_MANAGER">Crib Manager</option>
-                <option value="OPERATOR">Operator</option>
+                
                 <option value="PLANT_HOD">Plant HOD</option> */}
                 <option value="CALIBRATION_MANAGER">Plant Head</option>
+                <option value="OPERATOR">Operator</option>
                 {/* <option value="USER">User</option>
                 <option value="MANAGER">Manager</option> */}
               </select>

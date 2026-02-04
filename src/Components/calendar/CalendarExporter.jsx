@@ -40,7 +40,7 @@ const CalendarExporter = () => {
   // Fetch data and stats
   const fetchData = async () => {
     try {
-      const response = await fetch('https://qsutrarmsclm.hub.swajyot.co.in:8458/api/calendar/events');
+      const response = await fetch('http://localhost:8080/api/calendar/events');
       const events = await response.json();
       
       // Calculate stats

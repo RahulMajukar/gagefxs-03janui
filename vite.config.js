@@ -10,17 +10,17 @@ export default defineConfig({
     open: true,
    proxy: {
   '/api': {
-    target: 'https://qsutrarmsclm.hub.swajyot.co.in:8458',
+    target: 'http://localhost:8080',
     changeOrigin: true,
     // ✅ No rewrite — forward path as-is
   },
   '/app': {
-    target: 'https://qsutrarmsclm.hub.swajyot.co.in:8458',
+    target: 'http://localhost:8080',
     changeOrigin: true,
     ws: true,
   },
   '/topic': {
-    target: 'https://qsutrarmsclm.hub.swajyot.co.in:8458',
+    target: 'http://localhost:8080',
     changeOrigin: true,
     ws: true,
   },

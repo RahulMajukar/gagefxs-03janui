@@ -48,7 +48,7 @@ export default function EventModal({
         if (gageName) {
           try {
             // Fetch gages by serial number (assuming API supports query param)
-            const response = await fetch(`https://qsutrarmsclm.hub.swajyot.co.in:8458/api/calibration-manager/gages?serialNumber=${encodeURIComponent(gageName)}`);
+            const response = await fetch(`http://localhost:8080/api/calibration-manager/gages?serialNumber=${encodeURIComponent(gageName)}`);
             if (response.ok) {
               const gages = await response.json();
               if (gages.length > 0) {

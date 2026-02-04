@@ -314,7 +314,7 @@ const ReallocationRequestModal = ({ isOpen, onClose, gageData, onSuccess }) => {
           emailFormData.append('from', formData.requestedBy);
         }
 
-        const mailResponse = await fetch('https://qsutrarmsclm.hub.swajyot.co.in:8458/api/mail/send', {
+        const mailResponse = await fetch('http://localhost:8080/api/mail/send', {
           method: 'POST',
           body: emailFormData,
         });

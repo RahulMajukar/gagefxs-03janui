@@ -5,7 +5,7 @@ import { Trash2 } from "lucide-react";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 
-const SOCKET_URL = "https://qsutrarmsclm.hub.swajyot.co.in:8458/ws"; // replace with your backend websocket endpoint
+const SOCKET_URL = "http://localhost:8080/ws"; // replace with your backend websocket endpoint
 
 const ChatWindow = ({ group }) => {
   const [messages, setMessages] = useState([]);

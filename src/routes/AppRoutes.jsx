@@ -52,7 +52,7 @@ export default function AppRoutes() {
 <Route
   path="/dashboard/admin"
   element={
-    <ProtectedRoute allowedRoles={["ADMIN","IT_ADMIN"]}>
+    <ProtectedRoute allowedRoles={["ADMIN","IT_ADMIN","OPERATOR"]}>
       <GageManagerPage />  {/* <-- Admin sees GageManagerPage by default */}
     </ProtectedRoute>
   }
@@ -63,7 +63,7 @@ export default function AppRoutes() {
         <Route
           path="/dashboard/it-admin"
           element={
-            <ProtectedRoute allowedRoles={["IT_ADMIN","CALIBRATION_MANAGER"]}>
+            <ProtectedRoute allowedRoles={["IT_ADMIN","CALIBRATION_MANAGER","OPERATOR"]}>
               <ITAdminDashboard />
             </ProtectedRoute>
           }
@@ -75,7 +75,7 @@ export default function AppRoutes() {
         <Route
           path="/gage-manager"
           element={
-            <ProtectedRoute allowedRoles={["ADMIN", "INVENTORY_MANAGER"]}>
+            <ProtectedRoute allowedRoles={["ADMIN", "INVENTORY_MANAGER", "OPERATOR"]}>
               <GageManagerPage />
             </ProtectedRoute>
           }
@@ -144,7 +144,7 @@ export default function AppRoutes() {
         <Route
           path="/it-admin/users"
           element={
-            <ProtectedRoute allowedRoles={["IT_ADMIN","CALIBRATION_MANAGER"]}>
+            <ProtectedRoute allowedRoles={["IT_ADMIN","CALIBRATION_MANAGER","OPERATOR"]}>
               <ITAdminDashboard />
             </ProtectedRoute>
           }
@@ -152,7 +152,7 @@ export default function AppRoutes() {
         <Route
           path="/it-admin/departments"
           element={
-            <ProtectedRoute allowedRoles={["IT_ADMIN","CALIBRATION_MANAGER"]}>
+            <ProtectedRoute allowedRoles={["IT_ADMIN","CALIBRATION_MANAGER","OPERATOR"]}>
               <ITAdminDashboard />
             </ProtectedRoute>
           }
@@ -160,7 +160,7 @@ export default function AppRoutes() {
         <Route
           path="/it-admin/functions"
           element={
-            <ProtectedRoute allowedRoles={["IT_ADMIN","CALIBRATION_MANAGER"]}>
+            <ProtectedRoute allowedRoles={["IT_ADMIN","CALIBRATION_MANAGER","OPERATOR"]}>
               <ITAdminDashboard />
             </ProtectedRoute>
           }
@@ -168,7 +168,7 @@ export default function AppRoutes() {
         <Route
           path="/it-admin/operations"
           element={
-            <ProtectedRoute allowedRoles={["IT_ADMIN","CALIBRATION_MANAGER"]}>
+            <ProtectedRoute allowedRoles={["IT_ADMIN","CALIBRATION_MANAGER","OPERATOR"]}>
               <ITAdminDashboard />
             </ProtectedRoute>
           }
@@ -176,7 +176,7 @@ export default function AppRoutes() {
         <Route
           path="/it-admin/roles"
           element={
-            <ProtectedRoute allowedRoles={["IT_ADMIN","CALIBRATION_MANAGER"]}>
+            <ProtectedRoute allowedRoles={["IT_ADMIN","CALIBRATION_MANAGER","OPERATOR"]}>
               <ITAdminDashboard />
             </ProtectedRoute>
           }

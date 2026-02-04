@@ -53,6 +53,7 @@ const eventStyleGetter = (event) => {
   const userRelationship = event.userRelationship || event.resource?.userRelationship || 'none'
   const acceptanceStatus = event.acceptanceStatus?.toUpperCase() || 'PENDING'
   const isPastEvent = moment(event.end).isBefore(moment())
+  const eventCategory = event.category?.toLowerCase() || ''
 
   // Base colors by relationship - black text with colored borders
   const relationshipColors = {
@@ -92,21 +93,35 @@ const eventStyleGetter = (event) => {
       opacity: 0.7
     }
   }
-  // Inward events - gray styling
-  else if (event.category && event.category.includes('inward')) {
+  // ✅ INWARD events - GREEN styling (highest priority after past events)
+  else if (eventCategory.includes('inward')) {
     className = 'event-inward'
     style = {
-      backgroundColor: '#f3f4f6',
-      borderColor: '#6b7280',
-      color: '#374151',
+      backgroundColor: '#f0fdf4', // Light green background
+      borderColor: '#16a34a', // Green border
+      color: '#14532d', // Dark green text
       borderRadius: '6px',
-      border: '2px solid #6b7280',
+      border: '2px solid #16a34a',
       fontSize: '12px',
       padding: '2px 6px',
       fontWeight: '500'
     }
   }
-  // DECLINED events - RED border styling with black text (highest priority)
+  // ✅ SCHEDULED events - ORANGE styling
+  else if (eventCategory.includes('scheduled')) {
+    className = 'event-scheduled'
+    style = {
+      backgroundColor: '#fffbeb', // Light orange background
+      borderColor: '#f59e0b', // Orange border
+      color: '#78350f', // Dark orange text
+      borderRadius: '6px',
+      border: '2px solid #f59e0b',
+      fontSize: '12px',
+      padding: '2px 6px',
+      fontWeight: '500'
+    }
+  }
+  // DECLINED events - RED border styling with black text
   else if (acceptanceStatus === 'DECLINED') {
     className = 'event-declined'
     style = {
@@ -222,6 +237,7 @@ const DayEventsModal = ({ isOpen, onClose, events, onEventClick, date }) => {
               {events.map(event => {
                 const isPastEvent = moment(event.end).isBefore(moment())
                 const isDeclined = event.acceptanceStatus?.toUpperCase() === 'DECLINED'
+                const eventCategory = event.category?.toLowerCase() || ''
 
                 return (
                   <div
@@ -229,32 +245,44 @@ const DayEventsModal = ({ isOpen, onClose, events, onEventClick, date }) => {
                     onClick={() => onEventClick(event)}
                     className={`p-4 border rounded-lg transition-all cursor-pointer ${isPastEvent
                         ? 'border-gray-300 bg-gray-50 hover:bg-gray-100 opacity-70'
-                        : isDeclined
-                          ? 'border-red-400 bg-red-50 hover:bg-red-100'
-                          : 'border-gray-200 bg-white hover:bg-blue-50 hover:shadow-md'
+                        : eventCategory.includes('inward')
+                          ? 'border-green-400 bg-green-50 hover:bg-green-100'
+                          : eventCategory.includes('scheduled')
+                            ? 'border-orange-400 bg-orange-50 hover:bg-orange-100'
+                            : isDeclined
+                              ? 'border-red-400 bg-red-50 hover:bg-red-100'
+                              : 'border-gray-200 bg-white hover:bg-blue-50 hover:shadow-md'
                       }`}
                   >
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
                         <div className={`font-semibold ${isPastEvent ? 'text-gray-600' :
-                            isDeclined ? 'text-red-800' :
-                              'text-gray-900'
+                            eventCategory.includes('inward') ? 'text-green-800' :
+                              eventCategory.includes('scheduled') ? 'text-orange-800' :
+                                isDeclined ? 'text-red-800' :
+                                  'text-gray-900'
                           }`}>
                           {isPastEvent && '✓ '}
                           {isDeclined && '✕ '}
+                          {eventCategory.includes('inward') && '📥 '}
+                          {eventCategory.includes('scheduled') && '📅 '}
                           {event.title}
                         </div>
                         <div className={`text-sm mt-1 flex items-center ${isPastEvent ? 'text-gray-500' :
-                            isDeclined ? 'text-red-600' :
-                              'text-gray-600'
+                            eventCategory.includes('inward') ? 'text-green-600' :
+                              eventCategory.includes('scheduled') ? 'text-orange-600' :
+                                isDeclined ? 'text-red-600' :
+                                  'text-gray-600'
                           }`}>
                           <Clock className="h-3 w-3 mr-1" />
                           {moment(event.start).format('h:mm A')} – {moment(event.end).format('h:mm A')}
                         </div>
                         {event.location && (
                           <div className={`text-sm flex items-center mt-1 ${isPastEvent ? 'text-gray-400' :
-                              isDeclined ? 'text-red-500' :
-                                'text-gray-500'
+                              eventCategory.includes('inward') ? 'text-green-500' :
+                                eventCategory.includes('scheduled') ? 'text-orange-500' :
+                                  isDeclined ? 'text-red-500' :
+                                    'text-gray-500'
                             }`}>
                             <MapPin className="h-3 w-3 mr-1" />
                             {event.location}
@@ -262,11 +290,24 @@ const DayEventsModal = ({ isOpen, onClose, events, onEventClick, date }) => {
                         )}
                         {event.isRecurring && (
                           <div className={`text-sm flex items-center mt-1 ${isPastEvent ? 'text-gray-500' :
-                              isDeclined ? 'text-red-600' :
-                                'text-purple-600'
+                              eventCategory.includes('inward') ? 'text-green-600' :
+                                eventCategory.includes('scheduled') ? 'text-orange-600' :
+                                  isDeclined ? 'text-red-600' :
+                                    'text-purple-600'
                             }`}>
                             <RefreshCw className="h-3 w-3 mr-1" />
                             Recurring event
+                          </div>
+                        )}
+                        {event.category && (
+                          <div className={`text-sm flex items-center mt-1 ${eventCategory.includes('inward')
+                              ? 'bg-green-100 text-green-800 px-2 py-1 rounded inline-flex items-center'
+                              : eventCategory.includes('scheduled')
+                                ? 'bg-orange-100 text-orange-800 px-2 py-1 rounded inline-flex items-center'
+                                : 'bg-gray-100 text-gray-800 px-2 py-1 rounded inline-flex items-center'
+                            }`}>
+                            <Tag className="h-3 w-3 mr-1" />
+                            {event.category}
                           </div>
                         )}
                       </div>
@@ -276,15 +317,27 @@ const DayEventsModal = ({ isOpen, onClose, events, onEventClick, date }) => {
                             Past
                           </span>
                         )}
+                        {eventCategory.includes('inward') && (
+                          <span className="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 text-xs rounded">
+                            📥 Inward
+                          </span>
+                        )}
+                        {eventCategory.includes('scheduled') && (
+                          <span className="inline-flex items-center px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded">
+                            📅 Scheduled
+                          </span>
+                        )}
                         {event.userRelationship === 'owner' && (
                           <span className={`inline-flex items-center px-2 py-1 text-xs rounded ${isPastEvent ? 'bg-gray-200 text-gray-600' :
-                              isDeclined ? 'bg-red-200 text-red-800' :
-                                'bg-blue-100 text-blue-800'
+                              eventCategory.includes('inward') ? 'bg-green-200 text-green-800' :
+                                eventCategory.includes('scheduled') ? 'bg-orange-200 text-orange-800' :
+                                  isDeclined ? 'bg-red-200 text-red-800' :
+                                    'bg-blue-100 text-blue-800'
                             }`}>
                             <Crown className="h-3 w-3 mr-1" /> Owner
                           </span>
                         )}
-                        {event.userRelationship === 'attendee' && !isPastEvent && (
+                        {event.userRelationship === 'attendee' && !isPastEvent && !eventCategory.includes('inward') && !eventCategory.includes('scheduled') && (
                           <>
                             {event.acceptanceStatus?.toUpperCase() === 'ACCEPTED' && (
                               <span className="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 text-xs rounded">
@@ -388,6 +441,7 @@ export default function CalendarView() {
       title: event.title,
       start: event.start,
       end: event.end,
+      category: event.category,
       isRecurring: event.isRecurring,
       recurrence: event.recurrence,
       acceptanceStatus: event.acceptanceStatus
@@ -452,6 +506,7 @@ export default function CalendarView() {
           ...event,
           start,
           end,
+          category: event.category || '',
           acceptanceStatus: event.acceptanceStatus || 'pending',
           isRecurring: Boolean(event.isRecurring),
           recurrence: event.recurrence || null
@@ -1059,7 +1114,7 @@ export default function CalendarView() {
               </div>
             )}
 
-            {/* Legend Section - Updated with Declined status */}
+            {/* Legend Section - Updated with Category colors */}
             <div className="border-b border-gray-200">
               <button
                 onClick={() => toggleSection('legend')}
@@ -1084,7 +1139,17 @@ export default function CalendarView() {
                 <div className="px-6 pb-4">
                   <div className="bg-gray-50 rounded-lg p-3">
                     <div className="space-y-2 text-xs">
-                      <div className="font-semibold text-gray-700 mb-2">By Ownership:</div>
+                      <div className="font-semibold text-gray-700 mb-2">By Category:</div>
+                      <div className="flex items-center">
+                        <div className="w-3 h-3 bg-green-600 rounded mr-2"></div>
+                        <span className="text-gray-600">Inward (Green)</span>
+                      </div>
+                      <div className="flex items-center">
+                        <div className="w-3 h-3 bg-orange-600 rounded mr-2"></div>
+                        <span className="text-gray-600">Scheduled (Orange)</span>
+                      </div>
+                      
+                      <div className="font-semibold text-gray-700 mt-3 mb-2">By Ownership:</div>
                       <div className="flex items-center">
                         <div className="w-3 h-3 bg-blue-600 rounded mr-2"></div>
                         <Crown className="h-3 w-3 mr-1 text-blue-600" />
@@ -1174,18 +1239,21 @@ export default function CalendarView() {
                     event: ({ event }) => {
                       const isPastEvent = moment(event.end).isBefore(moment())
                       const isDeclined = event.acceptanceStatus?.toUpperCase() === 'DECLINED'
+                      const eventCategory = event.category?.toLowerCase() || ''
 
                       return (
                         <div className="flex items-center space-x-1 text-xs">
                           {isPastEvent && <span className="text-gray-500">✓</span>}
+                          {eventCategory.includes('inward') && <span className="text-green-600 font-bold">📥</span>}
+                          {eventCategory.includes('scheduled') && <span className="text-orange-600 font-bold">📅</span>}
                           {isDeclined && !isPastEvent && <span className="text-red-600 font-bold">✕</span>}
-                          {event.userRelationship === 'owner' && !isPastEvent && !isDeclined && (
+                          {event.userRelationship === 'owner' && !isPastEvent && !isDeclined && !eventCategory.includes('inward') && !eventCategory.includes('scheduled') && (
                             <Crown className="h-3 w-3" />
                           )}
-                          {event.userRelationship === 'attendee' && event.acceptanceStatus?.toUpperCase() === 'ACCEPTED' && !isPastEvent && (
+                          {event.userRelationship === 'attendee' && event.acceptanceStatus?.toUpperCase() === 'ACCEPTED' && !isPastEvent && !eventCategory.includes('inward') && !eventCategory.includes('scheduled') && (
                             <CheckCircle className="h-3 w-3" />
                           )}
-                          {event.userRelationship === 'attendee' && (!event.acceptanceStatus || event.acceptanceStatus?.toUpperCase() === 'PENDING') && !isPastEvent && !isDeclined && (
+                          {event.userRelationship === 'attendee' && (!event.acceptanceStatus || event.acceptanceStatus?.toUpperCase() === 'PENDING') && !isPastEvent && !isDeclined && !eventCategory.includes('inward') && !eventCategory.includes('scheduled') && (
                             <Clock className="h-3 w-3" />
                           )}
                           {event.isRecurring && (

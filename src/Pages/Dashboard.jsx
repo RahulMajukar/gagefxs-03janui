@@ -50,8 +50,9 @@ const Dashboard = () => {
       case "OPERATOR":
         return (
           <>
-            <OperatorDashboard functions={functions} operations={operations} />
-            {operations.length > 0 && <OperationPage user={user} />}
+            {/* <OperatorDashboard functions={functions} operations={operations} /> */}
+            {/* {operations.length > 0 && <OperationPage user={user} />} */}
+            <QCMngrDashboard/>
           </>
         );
 

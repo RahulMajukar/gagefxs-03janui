@@ -61,7 +61,7 @@ const GageDrawer = ({
       setIsLoading(true);
 
       // Use fetch (api was not defined in this component). Use same host pattern as history fetch.
-      const response = await fetch(`https://qsutrarmsclm.hub.swajyot.co.in:8458/api/calibration-manager/gages/${selectedGageForInward?.id}/inward`, {
+      const response = await fetch(`http://localhost:8080/api/calibration-manager/gages/${selectedGageForInward?.id}/inward`, {
         method: 'POST',
         body: formData
       });
@@ -107,7 +107,7 @@ const GageDrawer = ({
             username: localStorage.getItem("username") || "marsh"
           };
 
-          const calendarResponse = await fetch('https://qsutrarmsclm.hub.swajyot.co.in:8458/api/calendar/events', {
+          const calendarResponse = await fetch('http://localhost:8080/api/calendar/events', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(eventPayload)
@@ -194,7 +194,7 @@ const GageDrawer = ({
     try {
       setLoadingMedia(prev => ({ ...prev, [historyId]: true }));
 
-      const response = await fetch(`https://qsutrarmsclm.hub.swajyot.co.in:8458/api/calibration-manager/history/${historyId}/media`);
+      const response = await fetch(`http://localhost:8080/api/calibration-manager/history/${historyId}/media`);
 
       if (!response.ok) {
         throw new Error(`Failed to fetch media files: ${response.status}`);
@@ -261,7 +261,7 @@ const GageDrawer = ({
       description,
       start: startIso,
       end: endIso,
-      category: formData.category || 'work',
+      category: formData.category || 'scheduled',
       priority,
       location: formData.location || gage.location || '',
       attendees: formData.attendees || [],
@@ -277,7 +277,7 @@ const GageDrawer = ({
 
   const createCalendarEvent = async (eventObj) => {
     try {
-      const resp = await fetch('https://qsutrarmsclm.hub.swajyot.co.in:8458/api/calendar/events', {
+      const resp = await fetch('http://localhost:8080/api/calendar/events', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(eventObj)
@@ -312,9 +312,9 @@ const GageDrawer = ({
   // Add this function to download a single file
   const downloadFile = async (mediaId, fileName) => {
     try {
-      //https://qsutrarmsclm.hub.swajyot.co.in:8458/api/calibration-manager/media/1/download
-      // https://qsutrarmsclm.hub.swajyot.co.in:8458/api/calibration-manager/media/2/download
-      const response = await fetch(`https://qsutrarmsclm.hub.swajyot.co.in:8458/api/calibration-manager/media/${mediaId}/download`);
+      //http://localhost:8080/api/calibration-manager/media/1/download
+      // http://localhost:8080/api/calibration-manager/media/2/download
+      const response = await fetch(`http://localhost:8080/api/calibration-manager/media/${mediaId}/download`);
 
       if (!response.ok) {
         throw new Error('Failed to download file');
@@ -403,7 +403,7 @@ const GageDrawer = ({
       setHistoryLoading(true);
       setHistoryError(null);
 
-      const response = await fetch(`https://qsutrarmsclm.hub.swajyot.co.in:8458/api/calibration-manager/gages/${gageId}/history`);
+      const response = await fetch(`http://localhost:8080/api/calibration-manager/gages/${gageId}/history`);
 
       if (!response.ok) {
         throw new Error(`Failed to fetch calibration history: ${response.status}`);
@@ -586,7 +586,8 @@ const GageDrawer = ({
 
       // Build and send calendar event
       try {
-        const eventObj = buildCalendarEvent(formData, selectedGage, 'Scheduled');
+        const eventObj = buildCalendarEvent(formData, selectedGage, 'scheduled');
+        console.log('Creating calendar event with data:', eventObj);
         await createCalendarEvent(eventObj);
       } catch (err) {
         console.error('Failed to create calendar event after scheduling:', err);
